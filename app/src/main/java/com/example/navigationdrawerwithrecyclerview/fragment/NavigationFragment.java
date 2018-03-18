@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.navigationdrawerwithrecyclerview.NavigationActivity;
 import com.example.navigationdrawerwithrecyclerview.R;
+import com.example.navigationdrawerwithrecyclerview.adapter.BusinessAdapter;
 import com.example.navigationdrawerwithrecyclerview.adapter.INavigation;
 import com.example.navigationdrawerwithrecyclerview.adapter.NavigationAdapter;
 import com.example.navigationdrawerwithrecyclerview.model.NavigationData;
@@ -27,10 +28,19 @@ public class NavigationFragment extends Fragment implements INavigation {
 
     @BindView(R.id.rvNavigation)
     RecyclerView rvNavigation;
+    @BindView(R.id.rv_business)
+    RecyclerView rvBusiness;
 
     private NavigationAdapter adapter;
+    private BusinessAdapter businessAdapter;
 
-    private int array_icons [] = {R.drawable.icon_menu_news,R.drawable.icon_menu_feeds,R.drawable.icon_menu_watchlive,R.drawable.icon_menu_popular_tags,R.drawable.icon_menu_settings,R.drawable.icon_menu_about};
+    private int array_icons[] = {
+            R.drawable.icon_menu_news,
+            R.drawable.icon_menu_feeds,
+            R.drawable.icon_menu_watchlive,
+            R.drawable.icon_menu_popular_tags,
+            R.drawable.icon_menu_settings,
+            R.drawable.icon_menu_about};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,15 +62,20 @@ public class NavigationFragment extends Fragment implements INavigation {
         ButterKnife.bind(this, view);
         fillData();
         setAdapter();
+        setBusniessAdp();
         adapter.setSelected(0);
         return view;
     }
 
+    private void setBusniessAdp() {
+        businessAdapter = new BusinessAdapter(this);
+    }
+
     private ArrayList<NavigationData> fillData() {
         ArrayList<NavigationData> navigationDataArrayList = new ArrayList<>();
-        String array_navigation []= getResources().getStringArray(R.array.array_navigation);
+        String array_navigation[] = getResources().getStringArray(R.array.array_navigation);
 
-        for (int i = 0; i <array_navigation.length ; i++) {
+        for (int i = 0; i < array_navigation.length; i++) {
             NavigationData navigationData = new NavigationData();
             navigationData.setName(array_navigation[i]);
             navigationData.setDrawableId(array_icons[i]);
@@ -76,23 +91,24 @@ public class NavigationFragment extends Fragment implements INavigation {
         rvNavigation.setAdapter(adapter);
 
         adapter.refreshAdapter(fillData());
+
+
     }
 
     @Override
     public void onViewClick(int position) {
-        Log.e(TAG,"View"+position);
+        Log.e(TAG, "View" + position);
         replaceFragment(position);
     }
 
     @Override
     public void onIconClick(int position) {
-        Log.e(TAG,"Icon"+position);
+        Log.e(TAG, "Icon" + position);
         replaceFragment(position);
     }
 
-    private void replaceFragment(int position)
-    {
-        ((NavigationActivity)getActivity()).replaceFragment(position);
+    private void replaceFragment(int position) {
+        ((NavigationActivity) getActivity()).replaceFragment(position);
         adapter.setSelected(position);
     }
 }
